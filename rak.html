@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JSON, JS, CSV, Hash</title>
+<style>
+div{
+width:500px;
+height:150px;
+border:solid 1px orangered;
+font-size: large;
+}
+</style>
+</head>
+<body>
+<h1> Convert JSON to JS</h1>
+<div id ="jsontoJS"></div>
+<h1> Convert JSON to date</h1>
+<div id ="jsontoDate"></div>
+<h1> Convert JSON to CSV, CSV to JSON</h1>
+<button onclick="jsontoCSV()">JSON to CSV </button>
+<button onclick="csvtojson()" disabled id="btnjson">JSON to CSV </button>
+<div id ="jsontoCSV"></div>
+<div id ="csvtojson"></div>
+<script>
+var c='{"course":{"code":"BCSL504","cname":"WebLab"}}';
+var jsText=JSON.parse(c);
+document.getElementById("jsontoJS").innerHTML=jsText.course.code+"<br>";
+document.getElementById("jsontoJS").innerHTML+=jsText.course.cname;
+
+var c='{"course":{"code":"BCSL504","cname":"WebLab","start_date":"2024-09-12","end_date":"2024-09-26"}}';
+var jsText=JSON.parse(c);
+const sd=new Date(jsText.course.start_date);
+const ed=new Date(jsText.course.end_date);
+var options={year:'numeric',month:'long',day:'numeric'};
+document.getElementById("jsontoDate").innerHTML=sd.toLocaleString('en-gb',options)
++
+"<br>";
+document.getElementById("jsontoDate").innerHTML+=ed.toLocaleString('en-gb',options);
+
+function jsontoCSV(){
+let jsonData=[
+{"id":1,"USN":"1CR23CS410","Sname":"Rakshitha S","Dept":"CSE"},
+{"id":2,"USN":"1CR23CS600","Sname":"Harshini","Dept":"MBA"}
+]
+let CSV='';
+let headers=Object.keys(jsonData[0]);
+CSV+=headers.join()+"\n";
+jsonData.forEach(obj => {
+const values=headers.map(header=> obj[header]);
+CSV+=values.join()+"\n";
+});
+document.getElementById("jsontoCSV").innerHTML=CSV;
+// add this line to enable the button
+document.getElementById("btnjson").disabled=false;
+}
+function csvtojson(){
+let csvData=document.getElementById("jsontoCSV").innerHTML.trim();
+let rows =csvData.split("\n");
+let headers=rows[0].split(",");
+
+let jsonData=[];
+for(let i=1;i<rows.length;i++){
+let values=rows[i].split(",");
+let obj={}
+for(let j=0;j<headers.length;j++){
+const key=headers[j]; const value=values[j];
+obj[key]=value;
+}
+jsonData.push(obj);
+}
+document.getElementById("jsontoCSV").innerHTML=JSON.stringify(jsonData);
+document.getElementById("btnjson").disabled=true;
+}
+
+</script>
+</body>
+</html>

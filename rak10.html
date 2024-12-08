@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AJAX, JQuey, JSON</title>
+<script src="jquery-3.7.1.min.js"></script>
+<style>
+div{
+border:solid 1pt black;
+width:500px;height:150px;
+}
+</style>
+</head>
+<body>
+<h1>AJAX, JQuey, JSON</h1>
+<h2> Demo AJAX without JQuery</h2>
+<button onclick="btnLoad()">AJAX without Jquery</button>
+<div id="demoAjax"></div>
+
+<script>
+function btnLoad(){
+let xhr=new XMLHttpRequest();
+xhr.onreadystatechange=function(){
+if(this.readyState==4 && this.status==200)
+document.getElementById("demoAjax").innerHTML=this.responseText;
+};
+xhr.open("GET","quote.txt",true);
+xhr.send();
+}
+</script>
+
+<h2> Demo AJAX with JQuery</h2>
+<button onclick="funcLoad()"id="btnJquery">AJAX with Jquery</button>
+<div id="demoJquery"></div>
+
+<script>
+function funcLoad(){
+$("#btnJquery").click(function(){
+$.ajax({url:"quote.txt",success:
+function(result){
+$("#demoJquery").html(result);
+} } );
+});
+}
+</script>
+
+<h2> Get JSON IN JQuery</h2>
+<button id="btnGetJson">Get JSON content</button>
+<div id="studentInfo"></div>
+
+<script>
+$("#btnGetJson").click(function(){
+$.getJSON('student.json',function(result){
+$("#studentInfo").html("Name"+result.sname);
+$("#studentInfo").append("<br> USN:"+result.usn);
+$("#studentInfo").append("<br> Department:"+result.department);
+});
+});
+</script>
+
+<h2> Parse JSON IN JQUERY</h2>
+<button id="btnParseJson">Parse Json</button>
+<div id="courseInfo"></div>
+
+<script>
+$("#btnParseJson").click(function(){
+let txt='{"name":"weblab","code":"BCSL504"}'
+let obj=jQuery.parseJSON(txt);
+$("#courseInfo").html("Name:"+obj.name);
+$("#courseInfo").append("<br> Code:"+obj.code);
+});
+</script>
+</body>
+</html>
